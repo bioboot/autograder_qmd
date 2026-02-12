@@ -11,7 +11,7 @@ Once setup (see below) students can submit an R scripts (.R), quarto doc (.qmd),
 ### Overview:
 1. Instructor creates a coding assignment on gradescope.com, sets submission dates and pts etc.
 
-2. Instructor creates a **zip file** containing ==two required shell scripts== (with the specific names  `setup.sh` and `run\_autograder` ) and at least ==two R scripts== that do the grading and forming of results for gradescope (see below).
+2. Instructor creates a **zip file** containing two required shell scripts (with the specific names  `setup.sh` and `run\_autograder` ) and at least two R scripts that do the grading and forming of results for gradescope (see below).
 
 3. Student submits QMD or R script
 
@@ -23,7 +23,7 @@ As mentioned in pt 2 above you must create a **zip file** for Gradescope that co
 
 - ​**setup.sh**​: A bash shell script that runs once to install R and any required R packages (e.g., ​*gradeR*​,  *testthat, tidyverse, bio3d,*  etc...), 
 
-- ​**run\_autograder**​: An executable bash script that runs every time a student submits. It should call your your *grade.R*  code (see below) and produce the output in the correct directory for gradescope,
+- ​**run_autograder**​: An executable bash script that runs every time a student submits. It should call your your *grade.R*  code (see below) and produce the output in the correct directory for gradescope,
 
 - ​**grade.R**​: An R script who’s only job is to run your *testing script*  (called ​*tests.R,*​ see below) and write output to a required *results.json* file in gradescope JSON format. 
 	- This script typically runs the function `gradeR::calcGradesForGradescope()`  to run your main *tests.R* script  that does the actual grading tests on a single student submission and generate a JSON file with results for gradescope.
@@ -31,11 +31,13 @@ As mentioned in pt 2 above you must create a **zip file** for Gradescope that co
 - ​**tests.R**​: An R script that evaluates the student’s submission by checking student created objects against expected answers (i.e. does the grading work)
 	- This will typically use functions like `testthat::expect\_true()` to test if certain variables that students make in their submission script are what we ***expect*** them to be (i.e. they have the right answer) see details below.
 
-- ​**data files**​: You also need to add any necessary **data files** for the assignment to the zip archive or else the student submission code will not run.
+- ​Optional **Data files**​: You also need to add any necessary **data files** for the assignment to the zip archive or else the student submission code will not run.
+
+
 
 > ​**Side note**​: The `calcGradesForGradescope()` function from the ​**gradeR**​ package is useful as it can produce the expected JSON output that GradeScope wants.  
 > 
-> The ​**testthat**​ package is also super useful and we will use different \`expect\_\*\*\*()\` functions in our test script ​**tests.R**​ to test certain key variables that students make in their submission script (see details below).
+> The ​**testthat**​ package is also super useful and we will use different `expect_()` functions in our test script ​**tests.R**​ to test certain key variables that students make in their submission script (see details below).
 
 
 ### More details on each of these required files
@@ -46,107 +48,37 @@ Basically a bash script that Gradescope’s Linux servers run once to get all so
 
 ```
 #!/usr/bin/env bash
-```
 
-
-```
-
-```
-```
 ##- Install R on ubuntu
-```
-
-```
 apt-get install -y libxml2-dev libcurl4-openssl-dev libssl-dev
-```
-
-```
 apt-get install -y r-base
-```
 
-
-```
-
-```
-
-```
-
-```
-```
 ##- Install the needed R packages
-```
-
-```
 Rscript -e "install.packages('gradeR')"
-```
- 
-```
 Rscript -e "install.packages('stringr')"
-```
- 
-
-
 
 ## 2.   run\_autograder
 Another Bash script that Gradescope’s Linux servers run every time a single student submission needs to be graded.
 
-N.B. this file must have this name, ( `run\_autograder` ) because Gradescope expects this.
+N.B. this file must have this name, ( `run_autograder` ) because Gradescope expects this.
 
 It copies a single student submission into the directory that the Gradescope server expects (namely ), and then it runs the **test.R** grading script that does the main work of grading.
 
+
 ```
 #!/usr/bin/env bash
-```
 
-
-```
-
-```
-```
 ##- 1. Copy student submission file to source dir:
-```
-
-```
 cp /autograder/submission/assignment1.R /autograder/source/assignment1.R
-```
 
-
-```
-
-```
-```
 ##- 2. Change to this dir
-```
-
-```
 cd /autograder/source
-```
 
-
-```
-
-```
-```
 ##- 3. Optional update of tests.R for debugging
-```
-
-```
 ##-    Uncomment to fetch latest tests.R from GitHub before running
-```
-
-```
 \# wget -q https://raw.githubusercontent.com/bjgrant/bimm143-autograder/main/tests.R
-```
- 
 
-```
-
-```
-```
 ##- Run the grading script in the \`source/\` dir:
-```
-
-```
 LC\_ALL= Rscript grade.r
 ```
   
@@ -161,22 +93,16 @@ Thanks to the **gradeR** package this one is pretty simple - it just calls `grad
 
 ```
 library(gradeR)
-```
 
-
-```
-
-```
-```
-calcGradesForGradescope("assignment1.R", \# name of student submissions
-```
-
-                        ```
-"tests.r") \# the testthat tests...
+\#- Writes output to `/autograder/results/results.json` 
+\#-    or `./results.json` (which_results="testing")  
+calcGradesForGradescope(submission_file = "assignment1.R", 
+						test_file = "tests.r", 
+						which_results = "gradescope") # or set to "testing" 
 ```
  
 
-Note that the output of this function is formatted the way that Gradescope expects (basically a JSON file with specific entries). This is why we use it ;-)
+Note that the output of this function `results.json` is formatted the way that Gradescope expects (basically a JSON file with specific entries). This is why we use it ;-)
 
 
 ## 4.    tests.R 
@@ -190,34 +116,14 @@ The most common ones include `expect\_equal()`  `expect\_identical()`  `expect\_
 
 ```
 library(testthat)
-```
 
+# Each call to the test_that() function produces one test yielding 1 pt.
+# You can have multiple tests for each question
 
-```
+test_that(“Q1 (visible)", {
+  expect_equal( sum(myVector), 6) 
+})
 
-```
-```
-\# Each call to the test\_that() function produces one test yielding 1 pt.
-```
-
-```
-\# You can have multiple tests for each question
-```
-
-
-```
-
-```
-```
-test\_that(“Q1 (visible)", \{
-```
-
-  ```
-expect\_equal( sum(myVector), 6)
-```
- 
-```
-\})
 ```
 
 
@@ -238,54 +144,18 @@ For example, in your `run\_autograder`  script, add something like:
 
 ```
 #!/usr/bin/env bash
-```
 
-
-```
-
-```
-```
 ##- Copy student submission file to source dir:
-```
-
-```
 cp /autograder/submission/assignment1.R /autograder/source/assignment1.R
-```
 
-
-```
-
-```
-```
 ##- Change to this dir
-```
-
-```
 cd /autograder/source
-```
 
-
-```
-
-```
-```
 ##- Fetch latest tests.R from GitHub before running
-```
+wget -q https://raw.githubusercontent.com/bjgrant/bimm143-autograder/main/tests.R 
 
-```
-wget -q https://raw.githubusercontent.com/bjgrant/bimm143-autograder/main/tests.R
-```
- 
-
-```
-
-```
-```
 ##- Then run your grading as normal
-```
-
-```
-LC\_ALL=Rscript run\_grader.R
+LC_ALL=Rscript run_grader.R
 ```
 
 
