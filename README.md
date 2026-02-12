@@ -1,4 +1,4 @@
-# First steps with gradescope autograding of R quarto docs
+# Setting up autograding of R quarto docs on Gradescope
 
 ## Background	
 Gradescope provides a docker-based autograding system
