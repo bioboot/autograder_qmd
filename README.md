@@ -77,7 +77,7 @@ cd /autograder/source
 
 ##- 3. Optional update of tests.R for debugging
 ##-    Uncomment to fetch latest tests.R from GitHub before running
-# wget -q https://raw.githubusercontent.com/bjgrant/bimm143-autograder/main/tests.R
+# wget -q https://raw.githubusercontent.com/bioboot/autograder_qmd/refs/heads/main/tests.R
 
 ##- Run the grading script in the \`source/\` dir:
 LC_ALL= Rscript grade.r
@@ -154,7 +154,7 @@ cp /autograder/submission/assignment1.R /autograder/source/assignment1.R
 cd /autograder/source
 
 ##- Fetch latest tests.R from GitHub before running
-wget -q https://raw.githubusercontent.com/bjgrant/bimm143-autograder/main/tests.R 
+wget -q https://raw.githubusercontent.com/bioboot/autograder_qmd/refs/heads/main/tests.R 
 
 ##- Then run your grading as normal
 LC_ALL=Rscript run_grader.R

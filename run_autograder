@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
-# Set up autograder files
-
+##- 1. Copy student submission file to source dir:
 cp /autograder/submission/assignment1.R /autograder/source/assignment1.R
 
+##- 2. Change to this dir
 cd /autograder/source
 
+##- 3. Optional update of tests.R for debugging
+##-    Uncomment to fetch latest tests.R from GitHub before running
+# wget -q https://raw.githubusercontent.com/bioboot/autograder_qmd/refs/heads/main/tests.R
 
-LC_ALL= Rscript grade_one_submission.r 
+##- Run the grading script in the \`source/\` dir:
+LC_ALL= Rscript grade.r
