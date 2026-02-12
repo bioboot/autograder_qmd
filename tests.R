@@ -17,3 +17,11 @@ test_that("Q2 (invisible)", {
   expect_true(nchar(myString) > 2)
 
 })
+
+test_that("Q3 (visible)", {
+  
+  expect_equal( length(x), 1) 
+  expect_equal(x, 100, tolerance=1e-3)
+
+
+})

@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "name": "Q1 (visible)",
+      "score": 1,
+      "max_score": 1,
+      "visibility": "visible",
+      "output": "+1 (test passed): Criterion 1"
+    },
+    {
+      "name": "Q2 (invisible)",
+      "score": 2,
+      "max_score": 2,
+      "visibility": "after_due_date",
+      "output": "+1 (test passed): Criterion 1\n+1 (test passed): Criterion 2"
+    },
+    {
+      "name": "Q3 (visible)",
+      "score": 2,
+      "max_score": 2,
+      "visibility": "visible",
+      "output": "+1 (test passed): Criterion 1\n+1 (test passed): Criterion 2"
+    }
+  ]
+}

@@ -5,4 +5,4 @@ library(gradeR)
 
 calcGradesForGradescope(submission_file = "hw1.R",    # each student's submission must be named this!
                         test_file = "tests.r",        # the testthat tests 
-                        which_results = "gradescope") # or set to "testing" if not on gradescope 
+                        which_results = "testing")#"gradescope") # or set to "testing" if not on gradescope 

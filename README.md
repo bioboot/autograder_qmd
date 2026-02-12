@@ -160,4 +160,7 @@ wget -q https://raw.githubusercontent.com/bioboot/autograder_qmd/refs/heads/main
 LC_ALL=Rscript run_grader.R
 ```
 
+# See also:
+After starting this I found this repo https://github.com/tbrown122387/Using-gradeR-for-the-Gradescope-Autograder which does a great job describing their similar setup. Check it out!
+
 
