@@ -56,6 +56,8 @@ apt-get install -y r-base
 ##- Install the needed R packages
 Rscript -e "install.packages('gradeR')"
 Rscript -e "install.packages('stringr')"
+```
+
 
 ## 2.   run\_autograder
 Another Bash script that Gradescope’s Linux servers run every time a single student submission needs to be graded.
@@ -76,10 +78,10 @@ cd /autograder/source
 
 ##- 3. Optional update of tests.R for debugging
 ##-    Uncomment to fetch latest tests.R from GitHub before running
-\# wget -q https://raw.githubusercontent.com/bjgrant/bimm143-autograder/main/tests.R
+# wget -q https://raw.githubusercontent.com/bjgrant/bimm143-autograder/main/tests.R
 
 ##- Run the grading script in the \`source/\` dir:
-LC\_ALL= Rscript grade.r
+LC_ALL= Rscript grade.r
 ```
   
 
@@ -94,11 +96,12 @@ Thanks to the **gradeR** package this one is pretty simple - it just calls `grad
 ```
 library(gradeR)
 
-\#- Writes output to `/autograder/results/results.json` 
-\#-    or `./results.json` (which_results="testing")  
+#- Writes output to `/autograder/results/results.json` 
+#-    or `./results.json` (which_results="testing")  
 calcGradesForGradescope(submission_file = "assignment1.R", 
 						test_file = "tests.r", 
 						which_results = "gradescope") # or set to "testing" 
+
 ```
  
 
