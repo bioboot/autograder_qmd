@@ -1,14 +1,13 @@
-# autograder_qmd
-First steps with gradescope autograding of R quarto docs
+# First steps with gradescope autograding of R quarto docs
 
-# GradeScope autograder	
+## Background	
 Gradescope provides a docker-based autograding system
 https://gradescope-autograders.readthedocs.io/en/latest/
 
-Once setup (see below) students can submit an R scripts (.R), quarto doc (.qmd), or R Markdown (.Rmd) files and receive near immediate feedback based on the autograding test code we as instructors setup. 
+Once setup (see below) students can submit an R script (.R), quarto doc (.qmd), or R Markdown (.Rmd) file to gradescope and receive near immediate feedback based on the autograding test code we as instructors setup. 
 
 
-### Overview:
+## Overview:
 1. Instructor creates a coding assignment on gradescope.com, sets submission dates and pts etc.
 
 2. Instructor creates a **zip file** containing two required shell scripts (with the specific names  `setup.sh` and `run\_autograder` ) and at least two R scripts that do the grading and forming of results for gradescope (see below).
@@ -18,7 +17,7 @@ Once setup (see below) students can submit an R scripts (.R), quarto doc (.qmd),
 4. Gradescope runs the student's code in a Docker container, executes the tests, and returns grades/feedback.
 
 
-### Required Components of the .zip archive file
+## Required Components of the .zip archive file
 As mentioned in pt 2 above you must create a **zip file** for Gradescope that contains at least 4 files:
 
 - ​**setup.sh**​: A bash shell script that runs once to install R and any required R packages (e.g., ​*gradeR*​,  *testthat, tidyverse, bio3d,*  etc...), 
@@ -43,7 +42,7 @@ As mentioned in pt 2 above you must create a **zip file** for Gradescope that co
 ### More details on each of these required files
  We upload to gradescope as a singe **.zip** file that contains all four files:
 
-## 1.    setup.sh
+#### 1.    setup.sh
 Basically a bash script that Gradescope’s Linux servers run once to get all software we need for the assignment setup (like R itself, the gradeR and testthat packages and any packages the students uses in the assignment). For example:
 
 ```
@@ -59,7 +58,7 @@ Rscript -e "install.packages('stringr')"
 ```
 
 
-## 2.   run\_autograder
+#### 2.   run\_autograder
 Another Bash script that Gradescope’s Linux servers run every time a single student submission needs to be graded.
 
 N.B. this file must have this name, ( `run_autograder` ) because Gradescope expects this.
@@ -86,7 +85,7 @@ LC_ALL= Rscript grade.r
   
 
 
-## 3.   grade.R
+#### 3.   grade.R
 The first “controller” R script that runs the main testing script on each student submission. 
 
 This file can actually be named anything you want as long as you use that name in the `run\_autograder` shell script. 
@@ -108,7 +107,7 @@ calcGradesForGradescope(submission_file = "assignment1.R",
 Note that the output of this function `results.json` is formatted the way that Gradescope expects (basically a JSON file with specific entries). This is why we use it ;-)
 
 
-## 4.    tests.R 
+#### 4.    tests.R 
 This is your main testing R script with all the `testthat` function tests that check student produced objects (i.e. their answers) with what you expect them to be.
 
 Most of the time you will be testing if certain variables that students make in their submission script are what you ***expect*** them to be (i.e. they have the right answer ;-)
@@ -131,14 +130,14 @@ test_that(“Q1 (visible)", {
 
 
 
-## 5.   Other files
+#### 5.   Other files
 Remember to include any extra data files needed for a given homework (e.g. CSV files that the students are using). If you don’t included these then running the student submission code will fail and there will be nothing to test...
 
 
 
 
 
-# Debuging
+# A note on debuging
 Note that Gradescope will annoyingly need to build a new Docker image every time you upload a new autograder zip. This making debugging very time consuming and annoying. 
 
 I recommend adding something like ​`wget`​ ​`https://[your`​ ​`server/tests.R`​  to `run\_autograder` . This enables you to change the grading tests script without rebuilding the Docker image every time.
